@@ -14,6 +14,8 @@ import itertools
 # inside the `search` directory (like this one and `util.py`) and
 # then import from them like this:
 # from search.util import print_board, print_slide, print_swing
+from random import Random
+
 from classes.Coord import *
 from classes.Hex import test, Hex
 from search.BFS import *
@@ -35,18 +37,36 @@ def main():
     print_board(board_dict, compact=False)
     # print(data)
 
-    route = bfs(Hex(Coord(-1, 2), Token.r), Coord(-3, 2), board_dict).extractRoute()
-    print(f"\nRoute is: {route}\n")
     sources = data["upper"]
     destinations = data["lower"]
     # print(sources, "\n", destinations)
 
+    src_dst_pairs = []
     for src, dst in itertools.product(sources, destinations):
         src_hex = Hex(Coord(src[1], src[2]), getEnumByName(src[0], Token))
         dst_hex = Hex(Coord(dst[1], dst[2]), getEnumByName(dst[0], Token))
         if src_hex.token.battle(dst_hex.token):
             print(src, dst)
+            src_dst_pairs.append([src_hex, dst_hex])
 
+    x = Random().randint(a=0, b=len(src_dst_pairs)-1)
+    #x=0
+    s = src_dst_pairs[x][0]
+    d = src_dst_pairs[x][1].coord
+    route = bfs(s, d, board_dict).extractRoute()
+    print(f"\nFrom {s.coord.toTuple()} to {d.toTuple()}\nRoute is: {route}\n")
+    sleep(2)
+
+    print(s.token)
+    board_states = []
+    current_state = dict(board_dict)
+    for i in route:
+        current_state = dict(current_state)
+        current_state[i] = UPPER_SIGN[0] + s.token.name.upper() + UPPER_SIGN[1]
+        board_states.append(dict(current_state))
+        current_state[i] = ""
+
+    visualize_test(board_states)
     return board_dict
     # TODO:
     # Find and print a solution to the board configuration described
@@ -78,16 +98,5 @@ def visualize_test(board_states: list, spf=0.8):
         if count < len(board_states):
             os.system("cls")
 
-
-main()
-
-states = [
-    {(0, 0): "hello", (0, 2): "world", (3, -2): "(p)", (2, -1): "#####", (-4, 0): "(R)"},
-    {(0, 0): "hello", (0, 1): "world", (3, -2): "(p)", (2, -1): "#####", (-4, 0): "(R)"},
-    {(0, 0): "hello", (0, 0): "world", (3, -2): "(p)", (2, -1): "#####", (-4, 0): "(R)"},
-    {(0, 0): "hello", (0, 0): "world", (2, -2): "(p)", (2, -1): "#####", (-4, 0): "(R)"},
-    {(0, 0): "hello", (0, 0): "world", (1, -2): "(p)", (2, -1): "#####", (-4, 0): "(R)"},
-    {(0, 0): "hello", (0, 0): "world", (1, -3): "(p)", (2, -1): "#####", (-4, 0): "(R)"},
-]
 # visualize_test(states, 0.4)
 # test()
