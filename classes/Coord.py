@@ -8,6 +8,7 @@ UPPER_SIGN = "()"
 LOWER_SIGN = "  "
 BLOCK_SIGN = "#####"
 
+
 class Coord:
 
     def __init__(self, r, q):
@@ -20,18 +21,21 @@ class Coord:
     def distance(self, x: "Coord") -> int:
         # normalized to (0,0), then apply the pattern that I manually found.
         normalize = Coord(self.r - x.r, self.q - x.q)
-        if normalize.r != normalize.q:
-            return max(abs(normalize.r), abs(normalize.q))
+        if signCheck(normalize.r, normalize.q):
+            return abs(normalize.r + normalize.q)
         else:
-            return abs(normalize.r) + abs(normalize.q)
+            return max(abs(normalize.r), abs(normalize.q))
 
     def isValid(self) -> bool:
-        return True if self.distance(Coord(0, 0)) <= BOARD_SIZE else False
+        if self.distance(Coord(0, 0)) <= BOARD_SIZE:
+            return True
+        else:
+            return False
 
     def toTuple(self):
         return self.r, self.q
 
-    def move(self, move: Move)->"Coord":
+    def move(self, move: Move) -> "Coord":
         return Coord(self.r + move.value[0], self.q + move.value[1])
 
     def getSwingPoints(self, target: "Coord") -> list:
@@ -42,3 +46,7 @@ class Coord:
             if target.move(i).distance(self) > 1 and target.move(i).isValid():
                 swings.append(target.move(i))
         return swings
+
+
+def signCheck(a, b):
+    return a * b >= 0

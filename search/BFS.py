@@ -9,7 +9,7 @@ DEBUG = 0
 # Search direction x, y, z, -x, -y, -z.
 # which is clockwise direction around a given point, start from unit vector in r axis (x)
 class Node:
-    def __init__(self, parent, coord: Coord, token):
+    def __init__(self, parent, coord, token):
         self.parent = parent
         self.current = coord
         self.token = token
@@ -53,6 +53,8 @@ class Node:
                 continue
 
     def extractRoute(self):
+        if self.current is None:
+            return None
         route = []
         node = self
         while node is not None:
@@ -98,7 +100,8 @@ def bfs(src: Hex, dst: Coord, board_dict: dict):
             print(f"current queue: {[i.current.toTuple() for i in queue]}")
 
     if DEBUG: print("Not Found!")
-    return False
+    # return none node, to extract an empty route
+    return Node(None, None, None)
 
 
 class RouteInfo:

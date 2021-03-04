@@ -47,28 +47,12 @@ def main():
         src_hex = Hex(Coord(src[1], src[2]), getEnumByName(src[0], Token))
         dst_hex = Hex(Coord(dst[1], dst[2]), getEnumByName(dst[0], Token))
         if src_hex.token.battle(dst_hex.token):
-            print(src, dst)
             src_dst_pairs.append([src_hex, dst_hex])
-            routes.append(RouteInfo(src_hex, dst_hex, bfs(src_hex, dst_hex.coord, board_dict)))
+            routes.append(RouteInfo(src_hex, dst_hex, bfs(src_hex, dst_hex.coord, board_dict).extractRoute()))
 
-    x = Random().randint(a=0, b=len(src_dst_pairs)-1)
-    s = src_dst_pairs[x][0]
-    d = src_dst_pairs[x][1].coord
+    for i in routes:
+        print(i.src_hex.coord.toTuple()," to " ,i.dst_hex.coord.toTuple(), "\nRoute: ", i.route)
 
-    route = bfs(s, d, board_dict).extractRoute()
-    # print(f"\nFrom {s.coord.toTuple()} to {d.toTuple()}\nRoute is: {route}\n")
-    # sleep(2)
-
-    board_states = []
-    current_state = dict(board_dict)
-    for i in route:
-        current_state = dict(current_state)
-        current_state[i] = UPPER_SIGN[0] + s.token.name.upper() + UPPER_SIGN[1]
-        board_states.append(dict(current_state))
-        current_state[i] = ""
-
-    visualize_test(board_states)
-    return board_dict
     # TODO:
     # Find and print a solution to the board configuration described
     # by `data`.
