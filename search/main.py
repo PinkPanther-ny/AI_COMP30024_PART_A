@@ -42,22 +42,23 @@ def main():
     # print(sources, "\n", destinations)
 
     src_dst_pairs = []
+    routes = []
     for src, dst in itertools.product(sources, destinations):
         src_hex = Hex(Coord(src[1], src[2]), getEnumByName(src[0], Token))
         dst_hex = Hex(Coord(dst[1], dst[2]), getEnumByName(dst[0], Token))
         if src_hex.token.battle(dst_hex.token):
             print(src, dst)
             src_dst_pairs.append([src_hex, dst_hex])
+            routes.append(RouteInfo(src_hex, dst_hex, bfs(src_hex, dst_hex.coord, board_dict)))
 
     x = Random().randint(a=0, b=len(src_dst_pairs)-1)
-    #x=0
     s = src_dst_pairs[x][0]
     d = src_dst_pairs[x][1].coord
-    route = bfs(s, d, board_dict).extractRoute()
-    print(f"\nFrom {s.coord.toTuple()} to {d.toTuple()}\nRoute is: {route}\n")
-    sleep(2)
 
-    print(s.token)
+    route = bfs(s, d, board_dict).extractRoute()
+    # print(f"\nFrom {s.coord.toTuple()} to {d.toTuple()}\nRoute is: {route}\n")
+    # sleep(2)
+
     board_states = []
     current_state = dict(board_dict)
     for i in route:

@@ -1,5 +1,3 @@
-import copy
-
 from classes.Hex import *
 
 DEBUG = 0
@@ -44,10 +42,9 @@ class Node:
 
                 # Move onto a lower token if we can beat it, or simply ignore if the battle draw
                 elif board_dict[moved_coord.toTuple()][0] == LOWER_SIGN[0]:
-                    # print(self.token, board_dict[moved_coord.toTuple()][1].lower())
                     battle_result = self.token.battle(
                         getEnumByName(board_dict[moved_coord.toTuple()][1].lower(), Token))
-                    # print(battle_result)
+
                     if battle_result is None or battle_result == True:
                         self.available.append(Node(self, moved_coord, self.token))
 
@@ -102,3 +99,10 @@ def bfs(src: Hex, dst: Coord, board_dict: dict):
 
     if DEBUG: print("Not Found!")
     return False
+
+
+class RouteInfo:
+    def __init__(self, src_hex, dst_hex, route):
+        self.src_hex = src_hex
+        self.dst_hex = dst_hex
+        self.route = route
