@@ -18,6 +18,7 @@ from random import Random
 
 from classes.Coord import *
 from classes.Hex import test, Hex
+from classes.RouteInfo import RouteInfo
 from search.BFS import *
 from search.util import *
 
@@ -35,11 +36,9 @@ def main():
 
     board_dict = create_board(data)
     print_board(board_dict, compact=False)
-    # print(data)
 
     sources = data["upper"]
     destinations = data["lower"]
-    # print(sources, "\n", destinations)
 
     src_dst_pairs = []
     routes = []
@@ -51,7 +50,7 @@ def main():
             routes.append(RouteInfo(src_hex, dst_hex, bfs(src_hex, dst_hex.coord, board_dict).extractRoute()))
 
     for i in routes:
-        print(i.src_hex.coord.toTuple()," to " ,i.dst_hex.coord.toTuple(), "\nRoute: ", i.route)
+        print(i.src_hex.coord.toTuple(), " to ", i.dst_hex.coord.toTuple(), "\nRoute: ", i.route, len(route))
 
     # TODO:
     # Find and print a solution to the board configuration described
