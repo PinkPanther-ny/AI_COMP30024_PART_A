@@ -1,6 +1,5 @@
 from classes.Coord import *
 from classes.enums import *
-from search.BFS import visited
 
 
 class Node:
@@ -11,7 +10,7 @@ class Node:
         self.available = []
 
     # Using dict with assumption: each hex only contain one token
-    def getAvailableLocations(self, board_dict: dict):
+    def getAvailableLocations(self, board_dict: dict, visited):
 
         for i in Move:
             moved_coord = self.current.move(i)
@@ -46,3 +45,14 @@ class Node:
                     continue
             else:
                 continue
+
+    def extractRoute(self):
+        if self.current is None:
+            return None
+        route = []
+        node = self
+        while node is not None:
+            route.append(node.current.toTuple())
+            node = node.parent
+        route.reverse()
+        return route

@@ -1,17 +1,19 @@
 from classes.Hex import *
-from classes.Node import Node
 
+from classes.Node import Node
 DEBUG = 0
-visited = []
 
 
 # Search direction x, y, z, -x, -y, -z.
 # which is clockwise direction around a given point, start from unit vector in r axis (x)
 
-def bfs(src: Hex, dst: Coord, board_dict: dict):
+def bfs(src: Hex, dst: Coord, board_dict: dict, visited):
     queue = []
     visited.clear()
     # Enqueue root
+
+    # Don't know why this import only works inside function.
+
     root = Node(None, src.coord, src.token)
     queue.append(root)
     visited.append((root.current.r, root.current.q))
@@ -19,7 +21,7 @@ def bfs(src: Hex, dst: Coord, board_dict: dict):
     while len(queue) != 0:
 
         current = queue.pop(0)
-        current.getAvailableLocations(board_dict)
+        current.getAvailableLocations(board_dict, visited)
         if DEBUG:
             print("\n\n")
             print(f"Current search node: {current.current.toTuple()}\n"

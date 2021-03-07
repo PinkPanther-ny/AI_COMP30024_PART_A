@@ -6,24 +6,21 @@ This script contains the entry point to the program (the code in
 `__main__.py` calls `main()`). Your solution starts here!
 """
 
-import sys
-import json
 import itertools
+import json
+import os
+import sys
+from time import sleep
+
+from classes.RouteInfo import RouteInfo
+from search.BFS import *
+from search.util import *
 
 # If you want to separate your code into separate files, put them
 # inside the `search` directory (like this one and `util.py`) and
 # then import from them like this:
 # from search.util import print_board, print_slide, print_swing
-from random import Random
-
-from classes.Coord import *
-from classes.Hex import test, Hex
-from classes.RouteInfo import RouteInfo
-from search.BFS import *
-from search.util import *
-
-import os
-from time import sleep
+visited = []
 
 
 def main():
@@ -35,7 +32,7 @@ def main():
         sys.exit(1)
 
     board_dict = create_board(data)
-    print_board(board_dict, compact=False)
+    print_board(board_dict, compact=True)
 
     sources = data["upper"]
     destinations = data["lower"]
@@ -47,10 +44,11 @@ def main():
         dst_hex = Hex(Coord(dst[1], dst[2]), getEnumByName(dst[0], Token))
         if src_hex.token.battle(dst_hex.token):
             src_dst_pairs.append([src_hex, dst_hex])
-            routes.append(RouteInfo(src_hex, dst_hex, bfs(src_hex, dst_hex.coord, board_dict).extractRoute()))
+            routes.append(RouteInfo(src_hex, dst_hex, bfs(src_hex, dst_hex.coord, board_dict, visited).extractRoute()))
 
     for i in routes:
-        print(i.src_hex.coord.toTuple(), " to ", i.dst_hex.coord.toTuple(), "\nRoute: ", i.route, len(route))
+        print(i.src_hex.coord.toTuple(), " to ", i.dst_hex.coord.toTuple(), "\nRoute: ", i.route, "length",
+              len(i.route) if i.route is not None else 0)
 
     # TODO:
     # Find and print a solution to the board configuration described
