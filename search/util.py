@@ -5,6 +5,10 @@ Project Part A: Searching
 This module contains some helper functions for printing actions and boards.
 Feel free to use and/or modify them to help you develop your program.
 """
+import os
+from time import sleep
+
+from classes.Coord import UPPER_SIGN, LOWER_SIGN, BLOCK_SIGN
 
 
 def print_slide(t, r_a, q_a, r_b, q_b, **kwargs):
@@ -151,3 +155,28 @@ def print_board(board_dict, message="", compact=True, ansi=False, **kwargs):
     # fill in the template to create the board drawing, then print!
     board = template.format(multiline_message, *cells)
     print(board, **kwargs)
+
+
+def create_board(data: dict) -> dict:
+    board_dict = {}
+    for i in data["upper"]:
+        board_dict[(i[1], i[2])] = UPPER_SIGN[0] + i[0].upper() + UPPER_SIGN[1]
+    for i in data["lower"]:
+        board_dict[(i[1], i[2])] = LOWER_SIGN[0] + i[0].upper() + LOWER_SIGN[1]
+    for i in data["block"]:
+        board_dict[(i[1], i[2])] = BLOCK_SIGN
+
+    return board_dict
+
+
+def visualize_test(board_states: list, spf=0.8):
+    os.system("cls")
+    count = 0
+    for state in board_states:
+        count += 1
+        print_board(state)
+        sleep(spf)
+        if count < len(board_states):
+            os.system("cls")
+
+

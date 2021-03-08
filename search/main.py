@@ -5,15 +5,13 @@ Project Part A: Searching
 This script contains the entry point to the program (the code in
 `__main__.py` calls `main()`). Your solution starts here!
 """
-
 import itertools
 import json
-import os
 import sys
-from time import sleep
 
+from classes.Hex import *
 from classes.RouteInfo import RouteInfo
-from search.BFS import *
+from search.BFS import bfs
 from search.util import *
 
 visited = []
@@ -33,29 +31,6 @@ def main():
     routes = getAllRoutes(data, board_dict)
 
 
-def create_board(data: dict) -> dict:
-    board_dict = {}
-    for i in data["upper"]:
-        board_dict[(i[1], i[2])] = UPPER_SIGN[0] + i[0].upper() + UPPER_SIGN[1]
-    for i in data["lower"]:
-        board_dict[(i[1], i[2])] = LOWER_SIGN[0] + i[0].upper() + LOWER_SIGN[1]
-    for i in data["block"]:
-        board_dict[(i[1], i[2])] = BLOCK_SIGN
-
-    return board_dict
-
-
-def visualize_test(board_states: list, spf=0.8):
-    os.system("cls")
-    count = 0
-    for state in board_states:
-        count += 1
-        print_board(state)
-        sleep(spf)
-        if count < len(board_states):
-            os.system("cls")
-
-
 def getAllRoutes(data, board_dict, show_routes=True):
     sources = data["upper"]
     destinations = data["lower"]
@@ -73,8 +48,10 @@ def getAllRoutes(data, board_dict, show_routes=True):
     routes.sort()
     if show_routes:
         for i in routes:
-            print(f"{i.src_hex.coord.toTuple()} to {i.dst_hex.coord.toTuple()}\nRoute: {i.route} length {len(i.route)}")
+            print(f"{i.src_hex.coord.toTuple()} to {i.dst_hex.coord.toTuple()}\n"
+                  f"Route: {i.route} length {len(i.route)}")
 
     return routes
+
 # visualize_test(states, 0.4)
 # test()
