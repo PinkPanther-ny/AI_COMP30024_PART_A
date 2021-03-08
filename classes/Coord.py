@@ -38,14 +38,31 @@ class Coord:
     def move(self, move: Move) -> "Coord":
         return Coord(self.r + move.value[0], self.q + move.value[1])
 
-    def getSwingPoints(self, target: "Coord") -> list:
+    def getSwingPoints(self, src_node, target: "Coord", board_dict) -> list:
         # Get relative swing location, only check if it is on the board
         # Tricky way, since self is not adjacent to any swing points.
         swings = []
         for i in Move:
             if target.move(i).distance(self) > 1 and target.move(i).isValid():
                 swings.append(target.move(i))
-        return swings
+
+        x = []
+
+        for i in swings:
+
+            if i.toTuple() not in board_dict:
+                x.append(i)
+            elif board_dict[i.toTuple()][1].lower() == src_node.token.name:
+                x.append(i)
+            elif getEnumByName(board_dict[i.toTuple()][1].lower(), Token) is not None:
+                if src_node.token.battle(getEnumByName(board_dict[i.toTuple()][1].lower(), Token)):
+                    x.append(i)
+
+        # swings = [i for i in swings if (i.toTuple() not in board_dict) or
+        #          (board_dict[i.toTuple()][1].lower() == src_node.token.name) or
+        #          (src_node.token.battle(getEnumByName(board_dict[target.toTuple()][1].lower(), Token)))]
+
+        return x
 
 
 def signCheck(a, b):

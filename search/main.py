@@ -16,10 +16,6 @@ from classes.RouteInfo import RouteInfo
 from search.BFS import *
 from search.util import *
 
-# If you want to separate your code into separate files, put them
-# inside the `search` directory (like this one and `util.py`) and
-# then import from them like this:
-# from search.util import print_board, print_slide, print_swing
 visited = []
 
 
@@ -32,30 +28,9 @@ def main():
         sys.exit(1)
 
     board_dict = create_board(data)
-    print_board(board_dict, compact=True)
+    print_board(board_dict, compact=False)
 
-    sources = data["upper"]
-    destinations = data["lower"]
-
-    src_dst_pairs = []
-    routes = []
-    for src, dst in itertools.product(sources, destinations):
-        src_hex = Hex(Coord(src[1], src[2]), getEnumByName(src[0], Token))
-        dst_hex = Hex(Coord(dst[1], dst[2]), getEnumByName(dst[0], Token))
-        if src_hex.token.battle(dst_hex.token):
-            src_dst_pairs.append([src_hex, dst_hex])
-            routes.append(RouteInfo(src_hex, dst_hex, bfs(src_hex, dst_hex.coord, board_dict, visited).extractRoute()))
-
-    for i in routes:
-        print(i.src_hex.coord.toTuple(), " to ", i.dst_hex.coord.toTuple(), "\nRoute: ", i.route, "length",
-              len(i.route) if i.route is not None else 0)
-
-    # TODO:
-    # Find and print a solution to the board configuration described
-    # by `data`.
-    # Why not start by trying to print this configuration out using the
-    # `print_board` helper function? (See the `util.py` source code for
-    # usage information).
+    routes = getAllRoutes(data, board_dict)
 
 
 def create_board(data: dict) -> dict:
@@ -80,5 +55,26 @@ def visualize_test(board_states: list, spf=0.8):
         if count < len(board_states):
             os.system("cls")
 
+
+def getAllRoutes(data, board_dict, show_routes=True):
+    sources = data["upper"]
+    destinations = data["lower"]
+
+    src_dst_pairs = []
+    routes = []
+    for src, dst in itertools.product(sources, destinations):
+        src_hex = Hex(Coord(src[1], src[2]), getEnumByName(src[0], Token))
+        dst_hex = Hex(Coord(dst[1], dst[2]), getEnumByName(dst[0], Token))
+        if src_hex.token.battle(dst_hex.token):
+            src_dst_pairs.append([src_hex, dst_hex])
+            routes.append(RouteInfo(src_hex, dst_hex, bfs(src_hex, dst_hex.coord, board_dict, visited).extractRoute()))
+
+    # sort rule implemented in RouteInfo class
+    routes.sort()
+    if show_routes:
+        for i in routes:
+            print(f"{i.src_hex.coord.toTuple()} to {i.dst_hex.coord.toTuple()}\nRoute: {i.route} length {len(i.route)}")
+
+    return routes
 # visualize_test(states, 0.4)
 # test()
