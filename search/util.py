@@ -54,7 +54,7 @@ def print_board(board_dict, message="", compact=True, ansi=False, **kwargs):
 
     Example:
 
-        >>> board_dict = {
+        >>> example_board_dict = {
         ...     ( 0, 0): "hello",
         ...     ( 0, 2): "world",
         ...     ( 3,-2): "(p)",

@@ -23,9 +23,12 @@ class Node:
                     # Check if it's on board is done in getSwingPoints
                     # Check if swing point is empty,
                     # if not, check if their battle draw.
-                    swings = self.current.getSwingPoints(moved_coord)
-                    swings = [i for i in swings if (i.toTuple() not in board_dict) or
-                              (board_dict[i.toTuple()][1].lower() == self.token.name)]
+                    swings = self.current.getSwingPoints(self, moved_coord, board_dict)
+                    # check if the point we gonna swing is empty,
+                    # if not, the only two cases that we can continue is
+                    # 1: the same color from either side
+                    # 2: different color from other side that we can beat it
+
                     for swing in swings:
                         self.available.append(Node(self, swing, self.token))
 
@@ -48,7 +51,7 @@ class Node:
 
     def extractRoute(self):
         if self.current is None:
-            return None
+            return []
         route = []
         node = self
         while node is not None:

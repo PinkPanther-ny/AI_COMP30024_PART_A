@@ -3,3 +3,6 @@ class RouteInfo:
         self.src_hex = src_hex
         self.dst_hex = dst_hex
         self.route = route
+
+    def __lt__(self, other):
+        return len(self.route) < len(other.route)
