@@ -18,7 +18,8 @@ class HexNode:
             if moved_coord.isValid() and ((moved_coord.r, moved_coord.q) not in visited):
 
                 # Do the swing check before empty hex check, since swing moves fastest
-                if moved_coord.toTuple() in board_dict and board_dict[moved_coord.toTuple()][0] == UPPER_SIGN[0]:
+                if len(board_dict[moved_coord.toTuple()]) > 0 and \
+                        any(piece[0] == UPPER_SIGN[0] for piece in board_dict[moved_coord.toTuple()]):
                     # Swing from the location before movement taken
                     # Check if it's on board is done in getSwingPoints
                     # Check if swing point is empty,
@@ -33,16 +34,17 @@ class HexNode:
                         self.available.append(HexNode(self, swing, self.token))
 
                 # Check if a hex is empty that we can move to.
-                elif moved_coord.toTuple() not in board_dict:
+                elif len(board_dict[moved_coord.toTuple()]) == 0:
                     self.available.append(HexNode(self, moved_coord, self.token))
                     continue
 
                 # Move onto a lower token if we can beat it, or simply ignore if the battle draw
-                elif board_dict[moved_coord.toTuple()][0] == LOWER_SIGN[0]:
+                # Could improve, if more self side token than opponent, that would cause a lost!!!!!
+                elif any(piece[0] == LOWER_SIGN[0] for piece in board_dict[moved_coord.toTuple()]):
                     battle_result = self.token.battle(
-                        getEnumByName(board_dict[moved_coord.toTuple()][1].lower(), Token))
+                        getEnumByName(board_dict[moved_coord.toTuple()][0][1].lower(), Token))
 
-                    if battle_result or battle_result is None:
+                    if battle_result or (battle_result is None):
                         self.available.append(HexNode(self, moved_coord, self.token))
 
                     continue

@@ -5,6 +5,7 @@ Project Part A: Searching
 This script contains the entry point to the program (the code in
 `__main__.py` calls `main()`). Your solution starts here!
 """
+import copy
 import itertools
 import json
 import sys
@@ -26,7 +27,7 @@ def main():
         sys.exit(1)
 
     board_dict = create_board(data)
-    print_board(board_dict, compact=True)
+    print_board(board_dict, compact=False)
 
     routes = getAllRoutes(data, board_dict)
 
@@ -54,28 +55,19 @@ def getAllRoutes(data, board_dict, show_routes=True):
     return routes
 
 
-states = [
-    {
-        (0, 0): "hello",
-        (0, 2): "world",
-        (3, -2): "(p)",
-        (2, -1): "(S)",
-        (-4, 0): "(R)",
-    },
-    {
-        (0, 1): "hello",
-        (0, 2): "world",
-        (3, -2): "(p)",
-        (2, -1): "(S)",
-        (-4, 0): "(R)",
-    },
-    {
-        (0, 2): "hello",
-        (0, 2): "world",
-        (3, -2): "(p)",
-        (2, -1): "(S)",
-        (-4, 0): "(R)",
-    }
-]
-#visualize_test(states, 0.4)
+# Test cases for animating the game
+states = []
+state = defaultdict(list)
+state[(0, 0)].append("aaa")
+state[(0, 1)].append("bbb")
+state[(0, 2)].append("ccc")
+states.append(copy.deepcopy(state))
+
+state[(0, 0)].append("bbb")
+states.append(copy.deepcopy(state))
+
+del state[(0, 0)]
+states.append(copy.deepcopy(state))
+
+# visualize_test(states, 1)
 # test()

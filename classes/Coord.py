@@ -49,14 +49,21 @@ class Coord:
         x = []
 
         for i in swings:
+            # If the swing point is empty, safely add it
+            if len(board_dict[i.toTuple()]) == 0:
+                # if i.toTuple() not in board_dict:
+                x.append(i)
 
-            if i.toTuple() not in board_dict:
+            # else if the swing point contains a token from either side, as long as they are the same, add it
+            elif any(piece[1].lower() == src_node.token.name for piece in board_dict[i.toTuple()]):
+                # elif board_dict[i.toTuple()][1].lower() == src_node.token.name:
                 x.append(i)
-            elif board_dict[i.toTuple()][1].lower() == src_node.token.name:
-                x.append(i)
-            elif getEnumByName(board_dict[i.toTuple()][1].lower(), Token) is not None:
-                if src_node.token.battle(getEnumByName(board_dict[i.toTuple()][1].lower(), Token)):
-                    x.append(i)
+
+            # if swing point contains token that can be defeat, no matter from which side, smash it!
+
+            #elif getEnumByName(board_dict[i.toTuple()][1].lower(), Token) is not None:
+                #if src_node.token.battle(getEnumByName(board_dict[i.toTuple()][1].lower(), Token)):
+                    #x.append(i)
 
         # swings = [i for i in swings if (i.toTuple() not in board_dict) or
         #          (board_dict[i.toTuple()][1].lower() == src_node.token.name) or

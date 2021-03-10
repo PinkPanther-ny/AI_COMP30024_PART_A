@@ -6,6 +6,7 @@ This module contains some helper functions for printing actions and boards.
 Feel free to use and/or modify them to help you develop your program.
 """
 import os
+from collections import defaultdict
 from time import sleep
 
 from classes.Coord import UPPER_SIGN, LOWER_SIGN, BLOCK_SIGN
@@ -59,11 +60,11 @@ def print_board(board_dict, message="", compact=True, ansi=False, **kwargs):
     Example:
 
         >>> example_board_dict = {
-        ...     ( 0, 0): "hello",
-        ...     ( 0, 2): "world",
-        ...     ( 3,-2): "(p)",
-        ...     ( 2,-1): "(S)",
-        ...     (-4, 0): "(R)",
+        ...     ( 0, 0): ["hello"],
+        ...     ( 0, 2): ["world"],
+        ...     ( 3,-2): ["(p)"],
+        ...     ( 2,-1): ["(S)"],
+        ...     (-4, 0): ["(R)"],
         ... }
         >>> print_board(example_board_dict, "message goes here", ansi=False)
         # message goes here
@@ -142,8 +143,8 @@ def print_board(board_dict, message="", compact=True, ansi=False, **kwargs):
     ran = range(-4, +4 + 1)
     cells = []
     for rq in [(r, q) for r in ran for q in ran if -r - q in ran]:
-        if rq in board_dict:
-            cell = str(board_dict[rq]).center(5)
+        if len(board_dict[rq]) > 0:
+            cell = str(board_dict[rq][-1]).center(5)
             if ansi:
                 # put contents in bold
                 cell = f"\033[1m{cell}\033[0m"
@@ -158,13 +159,13 @@ def print_board(board_dict, message="", compact=True, ansi=False, **kwargs):
 
 
 def create_board(data: dict) -> dict:
-    board_dict = {}
+    board_dict = defaultdict(list)
     for i in data["upper"]:
-        board_dict[(i[1], i[2])] = UPPER_SIGN[0] + i[0].upper() + UPPER_SIGN[1]
+        board_dict[(i[1], i[2])].append(UPPER_SIGN[0] + i[0].upper() + UPPER_SIGN[1])
     for i in data["lower"]:
-        board_dict[(i[1], i[2])] = LOWER_SIGN[0] + i[0].upper() + LOWER_SIGN[1]
+        board_dict[(i[1], i[2])].append(LOWER_SIGN[0] + i[0].upper() + LOWER_SIGN[1])
     for i in data["block"]:
-        board_dict[(i[1], i[2])] = BLOCK_SIGN
+        board_dict[(i[1], i[2])].append(BLOCK_SIGN)
 
     return board_dict
 
@@ -178,5 +179,3 @@ def visualize_test(board_states: list, spf=0.8):
         sleep(spf)
         if count < len(board_states):
             os.system("cls")
-
-
