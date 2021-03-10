@@ -65,7 +65,7 @@ def print_board(board_dict, message="", compact=True, ansi=False, **kwargs):
         ...     ( 2,-1): "(S)",
         ...     (-4, 0): "(R)",
         ... }
-        >>> print_board(board_dict, "message goes here", ansi=False)
+        >>> print_board(example_board_dict, "message goes here", ansi=False)
         # message goes here
         #              .-'-._.-'-._.-'-._.-'-._.-'-.
         #             |     |     |     |     |     |

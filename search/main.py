@@ -26,7 +26,7 @@ def main():
         sys.exit(1)
 
     board_dict = create_board(data)
-    print_board(board_dict, compact=False)
+    print_board(board_dict, compact=True)
 
     routes = getAllRoutes(data, board_dict)
 
@@ -53,5 +53,29 @@ def getAllRoutes(data, board_dict, show_routes=True):
 
     return routes
 
-# visualize_test(states, 0.4)
+
+states = [
+    {
+        (0, 0): "hello",
+        (0, 2): "world",
+        (3, -2): "(p)",
+        (2, -1): "(S)",
+        (-4, 0): "(R)",
+    },
+    {
+        (0, 1): "hello",
+        (0, 2): "world",
+        (3, -2): "(p)",
+        (2, -1): "(S)",
+        (-4, 0): "(R)",
+    },
+    {
+        (0, 2): "hello",
+        (0, 2): "world",
+        (3, -2): "(p)",
+        (2, -1): "(S)",
+        (-4, 0): "(R)",
+    }
+]
+#visualize_test(states, 0.4)
 # test()
