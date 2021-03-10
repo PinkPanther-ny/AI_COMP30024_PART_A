@@ -2,7 +2,7 @@ from classes.Coord import *
 from classes.enums import *
 
 
-class Node:
+class HexNode:
     def __init__(self, parent, coord, token):
         self.parent = parent
         self.current = coord
@@ -30,11 +30,11 @@ class Node:
                     # 2: different color from other side that we can beat it
 
                     for swing in swings:
-                        self.available.append(Node(self, swing, self.token))
+                        self.available.append(HexNode(self, swing, self.token))
 
                 # Check if a hex is empty that we can move to.
                 elif moved_coord.toTuple() not in board_dict:
-                    self.available.append(Node(self, moved_coord, self.token))
+                    self.available.append(HexNode(self, moved_coord, self.token))
                     continue
 
                 # Move onto a lower token if we can beat it, or simply ignore if the battle draw
@@ -43,7 +43,7 @@ class Node:
                         getEnumByName(board_dict[moved_coord.toTuple()][1].lower(), Token))
 
                     if battle_result or battle_result is None:
-                        self.available.append(Node(self, moved_coord, self.token))
+                        self.available.append(HexNode(self, moved_coord, self.token))
 
                     continue
             else:

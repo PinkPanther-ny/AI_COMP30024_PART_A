@@ -1,6 +1,6 @@
 from classes.Hex import *
 
-from classes.Node import Node
+from classes.HexNode import HexNode
 DEBUG = 0
 
 
@@ -14,7 +14,7 @@ def bfs(src: Hex, dst: Coord, board_dict: dict, visited):
 
     # Don't know why this import only works inside function.
 
-    root = Node(None, src.coord, src.token)
+    root = HexNode(None, src.coord, src.token)
     queue.append(root)
     visited.append((root.current.r, root.current.q))
 
@@ -46,4 +46,4 @@ def bfs(src: Hex, dst: Coord, board_dict: dict, visited):
     if DEBUG:
         print("Not Found!")
     # return none node, to extract an empty route
-    return Node(None, None, None)
+    return HexNode(None, None, None)
