@@ -10,6 +10,8 @@ import itertools
 import json
 import sys
 
+from classes.BoardNode import BoardNode
+from classes.BoardState import BoardState
 from classes.Hex import *
 from classes.RouteInfo import RouteInfo
 from search.BFS import bfs
@@ -28,6 +30,8 @@ def main():
 
     board_dict = create_board(data)
     print_board(board_dict, compact=False)
+
+    rootNode = BoardNode()
 
     routes = getAllRoutes(data, board_dict)
 
@@ -58,16 +62,23 @@ def getAllRoutes(data, board_dict, show_routes=True):
 # Test cases for animating the game
 states = []
 state = defaultdict(list)
-state[(0, 0)].append("aaa")
-state[(0, 1)].append("bbb")
-state[(0, 2)].append("ccc")
+state[(0, 0)].append(" s ")
+state[(0, 1)].append(" p ")
+state[(0, 2)].append(" r ")
+state = BoardState(state)
+state.update()
 states.append(copy.deepcopy(state))
 
-state[(0, 0)].append("bbb")
+
+state.board_dict[(0, 0)].append("(r)")
+state.update()
 states.append(copy.deepcopy(state))
 
-del state[(0, 0)]
+state.board_dict[(0, 0)].append("(p)")
+state.board_dict[(0, 0)].append("(s)")
+
+state.update()
 states.append(copy.deepcopy(state))
 
-# visualize_test(states, 1)
+visualize_test(states, spf=5, messageOn=True, compact=False)
 # test()

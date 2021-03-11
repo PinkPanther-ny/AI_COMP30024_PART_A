@@ -170,12 +170,12 @@ def create_board(data: dict) -> dict:
     return board_dict
 
 
-def visualize_test(board_states: list, spf=0.8):
+def visualize_test(board_states: list, spf=0.8, messageOn=True, compact=True):
     os.system("cls")
     count = 0
     for state in board_states:
         count += 1
-        print_board(state)
+        print_board(state.board_dict, str(state.board_dict) if messageOn else "", compact=compact)
         sleep(spf)
         if count < len(board_states):
             os.system("cls")

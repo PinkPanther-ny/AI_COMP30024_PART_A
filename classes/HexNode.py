@@ -42,7 +42,7 @@ class HexNode:
                 # Could improve, if more self side token than opponent, that would cause a lost!!!!!
                 elif any(piece[0] == LOWER_SIGN[0] for piece in board_dict[moved_coord.toTuple()]):
                     battle_result = self.token.battle(
-                        getEnumByName(board_dict[moved_coord.toTuple()][0][1].lower(), Token))
+                        getEnumByName(board_dict[moved_coord.toTuple()][0][1], Token))
 
                     if battle_result or (battle_result is None):
                         self.available.append(HexNode(self, moved_coord, self.token))

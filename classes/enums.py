@@ -24,7 +24,7 @@ class Token(Enum):
 
 def getEnumByName(name, enum):
     for i in enum:
-        if name == i.name:
+        if name.lower() == i.name:
             return i
     return None
 
