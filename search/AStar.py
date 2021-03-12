@@ -1,6 +1,5 @@
 def AStar(rootNode):
 
 
-
     return
 

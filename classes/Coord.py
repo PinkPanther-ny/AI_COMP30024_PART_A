@@ -1,12 +1,5 @@
 from classes.enums import *
-
-# Global variables
-
-# Maximum distance from the centre hex
-BOARD_SIZE = 4
-UPPER_SIGN = "()"
-LOWER_SIGN = "  "
-BLOCK_SIGN = "#####"
+from config.config import *
 
 
 class Coord:
@@ -55,19 +48,15 @@ class Coord:
                 x.append(i)
 
             # else if the swing point contains a token from either side, as long as they are the same, add it
-            elif any(piece[1].lower() == src_node.token.name for piece in board_dict[i.toTuple()]):
-                # elif board_dict[i.toTuple()][1].lower() == src_node.token.name:
+            elif any(piece[1].lower() == src_node.cur_hex.token.name for piece in board_dict[i.toTuple()]):
+                # elif board_dict[i.toTuple()][1].lower() == src_node.cur_hex.token.name:
                 x.append(i)
 
             # if swing point contains token that can be defeat, no matter from which side, smash it!
-
-            #elif getEnumByName(board_dict[i.toTuple()][1].lower(), Token) is not None:
-                #if src_node.token.battle(getEnumByName(board_dict[i.toTuple()][1].lower(), Token)):
-                    #x.append(i)
-
-        # swings = [i for i in swings if (i.toTuple() not in board_dict) or
-        #          (board_dict[i.toTuple()][1].lower() == src_node.token.name) or
-        #          (src_node.token.battle(getEnumByName(board_dict[target.toTuple()][1].lower(), Token)))]
+            elif CAN_SWING_ONTO_FRIENDLY_TOKEN and \
+                    (getEnumByName(board_dict[i.toTuple()][0][1].lower(), Token) is not None):
+                if src_node.cur_hex.token.battle(getEnumByName(board_dict[i.toTuple()][0][1].lower(), Token)):
+                    x.append(i)
 
         return x
 

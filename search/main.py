@@ -31,7 +31,7 @@ def main():
     board_dict = create_board(data)
     root_state = BoardState(board_dict)
     routes = getAllRoutes(data, board_dict, show_routes=True)
-    print_board(root_state, compact=True)
+    print_board(root_state, compact=False)
     root_node = BoardNode(
         BoardState(board_dict), parent=None, action=None,
         pathCost=0, heuristic=max([len(i) for i in routes])

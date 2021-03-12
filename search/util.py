@@ -8,8 +8,7 @@ Feel free to use and/or modify them to help you develop your program.
 import os
 from collections import defaultdict
 from time import sleep
-
-from classes.Coord import UPPER_SIGN, LOWER_SIGN, BLOCK_SIGN
+from config.config import *
 
 
 def print_slide(t, r_a, q_a, r_b, q_b, **kwargs):
