@@ -1,3 +1,6 @@
-def AStar(rootNode, goalState):
+def AStar(rootNode):
+
+
 
     return
+

@@ -1,3 +1,6 @@
+from classes.Coord import UPPER_SIGN
+from classes.Hex import Hex, tupleToCoord
+from classes.HexNode import HexNode
 from classes.enums import getEnumByName, Token
 
 
@@ -34,3 +37,16 @@ class BoardState:
                         for token in self.board_dict[i].copy():
                             if token == pieces[0]:
                                 self.board_dict[i].remove(token)
+
+    def getChildStates(self):
+        upper_hexes = []
+        for location in self.board_dict:
+            for piece in self.board_dict[location]:
+                if piece[0] == UPPER_SIGN[0]:
+                    upper_hexes.append(Hex(tupleToCoord(location), getEnumByName(piece[1], Token)))
+
+        print([str(i) for i in upper_hexes])
+
+        x=HexNode(None, upper_hexes[0].coord, upper_hexes[0].token)
+        x.getAvailableLocations(self.board_dict, [])
+        print([str(i) for i in x.available])

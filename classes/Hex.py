@@ -9,3 +9,6 @@ class Hex:
     def move(self, move: Move):
         self.coord.r += move.value[0]
         self.coord.q += move.value[1]
+
+    def __str__(self):
+        return f"({self.token.name.upper()}, {self.coord.toTuple()})"

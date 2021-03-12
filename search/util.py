@@ -32,7 +32,7 @@ def print_swing(t, r_a, q_a, r_b, q_b, **kwargs):
     print(f"Turn {t}: SWING from {(r_a, q_a)} to {(r_b, q_b)}", **kwargs)
 
 
-def print_board(board_dict, message="", compact=True, ansi=False, **kwargs):
+def print_board(state, message="", compact=True, ansi=False, **kwargs):
     """
     For help with visualisation and debugging: output a board diagram with
     any information you like (tokens, heuristic values, distances, etc.).
@@ -143,8 +143,8 @@ def print_board(board_dict, message="", compact=True, ansi=False, **kwargs):
     ran = range(-4, +4 + 1)
     cells = []
     for rq in [(r, q) for r in ran for q in ran if -r - q in ran]:
-        if len(board_dict[rq]) > 0:
-            cell = str(board_dict[rq][-1]).center(5)
+        if len(state.board_dict[rq]) > 0:
+            cell = str(state.board_dict[rq][-1]).center(5)
             if ansi:
                 # put contents in bold
                 cell = f"\033[1m{cell}\033[0m"
@@ -175,7 +175,7 @@ def visualize_test(board_states: list, spf=0.8, messageOn=True, compact=True):
     count = 0
     for state in board_states:
         count += 1
-        print_board(state.board_dict, str(state.board_dict) if messageOn else "", compact=compact)
+        print_board(state, str(state.board_dict) if messageOn else "", compact=compact)
         sleep(spf)
         if count < len(board_states):
             os.system("cls")

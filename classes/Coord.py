@@ -74,3 +74,8 @@ class Coord:
 
 def signCheck(a, b):
     return a * b >= 0
+
+
+def tupleToCoord(location):
+    assert type(location) == tuple
+    return Coord(location[0], location[1])

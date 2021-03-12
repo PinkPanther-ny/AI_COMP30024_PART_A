@@ -7,9 +7,9 @@ DEBUG = 0
 # Search direction x, y, z, -x, -y, -z.
 # which is clockwise direction around a given point, start from unit vector in r axis (x)
 
-def bfs(src: Hex, dst: Coord, board_dict: dict, visited):
+def bfs(src: Hex, dst: Coord, board_dict: dict):
     queue = []
-    visited.clear()
+    visited = []
     # Enqueue root
 
     # Don't know why this import only works inside function.

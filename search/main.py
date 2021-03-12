@@ -9,15 +9,15 @@ import copy
 import itertools
 import json
 import sys
+from math import inf
 
 from classes.BoardNode import BoardNode
 from classes.BoardState import BoardState
 from classes.Hex import *
 from classes.RouteInfo import RouteInfo
+from search.AStar import AStar
 from search.BFS import bfs
 from search.util import *
-
-visited = []
 
 
 def main():
@@ -29,11 +29,16 @@ def main():
         sys.exit(1)
 
     board_dict = create_board(data)
-    print_board(board_dict, compact=False)
+    root_state = BoardState(board_dict)
+    routes = getAllRoutes(data, board_dict, show_routes=True)
+    print_board(root_state, compact=True)
+    root_node = BoardNode(
+        BoardState(board_dict), parent=None, action=None,
+        pathCost=0, heuristic=max([len(i) for i in routes])
+    )
 
-    rootNode = BoardNode()
-
-    routes = getAllRoutes(data, board_dict)
+    AStar(root_node)
+    root_state.getChildStates()
 
 
 def getAllRoutes(data, board_dict, show_routes=True):
@@ -47,14 +52,13 @@ def getAllRoutes(data, board_dict, show_routes=True):
         dst_hex = Hex(Coord(dst[1], dst[2]), getEnumByName(dst[0], Token))
         if src_hex.token.battle(dst_hex.token):
             src_dst_pairs.append([src_hex, dst_hex])
-            routes.append(RouteInfo(src_hex, dst_hex, bfs(src_hex, dst_hex.coord, board_dict, visited).extractRoute()))
+            routes.append(RouteInfo(src_hex, dst_hex, bfs(src_hex, dst_hex.coord, board_dict).extractRoute()))
 
     # sort rule implemented in RouteInfo class
     routes.sort()
     if show_routes:
         for i in routes:
-            print(f"{i.src_hex.coord.toTuple()} to {i.dst_hex.coord.toTuple()}\n"
-                  f"Route: {i.route} length {len(i.route)}")
+            print(i)
 
     return routes
 
@@ -69,7 +73,6 @@ state = BoardState(state)
 state.update()
 states.append(copy.deepcopy(state))
 
-
 state.board_dict[(0, 0)].append("(r)")
 state.update()
 states.append(copy.deepcopy(state))
@@ -80,5 +83,5 @@ state.board_dict[(0, 0)].append("(s)")
 state.update()
 states.append(copy.deepcopy(state))
 
-visualize_test(states, spf=5, messageOn=True, compact=False)
+# visualize_test(states, spf=0.8, messageOn=True, compact=False)
 # test()
