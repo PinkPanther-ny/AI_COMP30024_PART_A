@@ -30,7 +30,7 @@ def main():
 
     board_dict = create_board(data)
     root_state = BoardState(board_dict)
-    routes = getAllRoutes(data, board_dict, show_routes=True)
+    routes = getAllRoutes(data, board_dict)
     print_board(root_state, compact=False)
     root_node = BoardNode(
         BoardState(board_dict), parent=None, action=None,
@@ -41,7 +41,7 @@ def main():
     root_state.getChildStates()
 
 
-def getAllRoutes(data, board_dict, show_routes=True):
+def getAllRoutes(data, board_dict):
     sources = data["upper"]
     destinations = data["lower"]
 
@@ -56,7 +56,7 @@ def getAllRoutes(data, board_dict, show_routes=True):
 
     # sort rule implemented in RouteInfo class
     routes.sort()
-    if show_routes:
+    if SINGLE_TOKEN_SHOW_ROUTE:
         for i in routes:
             print(i)
 

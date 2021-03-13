@@ -1,9 +1,10 @@
+import itertools
 from typing import List
 
-from classes.Coord import UPPER_SIGN
 from classes.Hex import Hex, tupleToCoord
 from classes.HexNode import HexNode
 from classes.enums import getEnumByName, Token
+from config.config import *
 
 
 class BoardState:
@@ -47,8 +48,18 @@ class BoardState:
                 if piece[0] == UPPER_SIGN[0]:
                     upper_hexes.append(Hex(tupleToCoord(location), getEnumByName(piece[1], Token)))
 
+        next_steps = []
         for i in range(len(upper_hexes)):
-            print(str(upper_hexes[i]))
-            x = HexNode(None, Hex(upper_hexes[i].coord, upper_hexes[i].token))
-            x.getAvailableLocations(self.board_dict, [])
-            print([str(i.cur_hex.coord.toTuple()) for i in x.available])
+            this_hex = HexNode(None, Hex(upper_hexes[i].coord, upper_hexes[i].token))
+            this_hex.getAvailableLocations(self.board_dict, [])
+            next_steps.append([i.cur_hex for i in this_hex.available])
+            if GET_CHILD_STATES_DEBUG:
+                print(f"Hex: {str(upper_hexes[i])} with its next available movements:\n"
+                      f"{[str(i.cur_hex) for i in this_hex.available]}\n")
+        # A list of list of child state hexes
+        combination = [[n for n in i] for i in itertools.product(*next_steps)]
+
+        if CHILD_STATES_SHOW_HEX:
+            print("The combination of their movements are:")
+            for i in combination:
+                print("\t\t", [str(h) for h in i])
