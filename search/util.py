@@ -5,10 +5,17 @@ Project Part A: Searching
 This module contains some helper functions for printing actions and boards.
 Feel free to use and/or modify them to help you develop your program.
 """
+import itertools
 import os
 from collections import defaultdict
 from time import sleep
+
+from classes.Coord import Coord
+from classes.Hex import Hex
+from classes.RouteInfo import RouteInfo
+from classes.enums import getEnumByName, Token
 from config.config import *
+from search.BFS import bfs
 
 
 def print_slide(t, r_a, q_a, r_b, q_b, **kwargs):
@@ -169,7 +176,21 @@ def create_board(data: dict) -> dict:
     return board_dict
 
 
-def visualize_test(board_states: list, spf=0.8, messageOn=True, compact=True):
+def board_to_dict(board_dict):
+    data = dict(upper=[], lower=[], block=[])
+    for location in board_dict:
+        if len(board_dict[location]):
+            for token in board_dict[location]:
+                if token[0] == UPPER_SIGN[0]:
+                    data['upper'].append([token[1].lower(), location[0], location[1]])
+                elif token[0] == LOWER_SIGN[0]:
+                    data['lower'].append([token[1].lower(), location[0], location[1]])
+                else:
+                    data['block'].append(["", location[0], location[1]])
+    return data
+
+
+def visualize_test(board_states: list, spf=0.8, messageOn=False, compact=True):
     os.system("cls")
     count = 0
     for state in board_states:
@@ -178,3 +199,34 @@ def visualize_test(board_states: list, spf=0.8, messageOn=True, compact=True):
         sleep(spf)
         if count < len(board_states):
             os.system("cls")
+
+
+def getSrcDstPairs(board_state):
+    board_dict = board_state.board_dict
+    sources = board_to_dict(board_dict)["upper"]
+    destinations = board_to_dict(board_dict)["lower"]
+
+    src_dst_pairs = []
+    for src, dst in itertools.product(sources, destinations):
+        src_hex = Hex(Coord(src[1], src[2]), getEnumByName(src[0], Token))
+        dst_hex = Hex(Coord(dst[1], dst[2]), getEnumByName(dst[0], Token))
+        if src_hex.token.battle(dst_hex.token):
+            src_dst_pairs.append([src_hex, dst_hex])
+
+    return src_dst_pairs
+
+
+def getAllRoutes(board_state):
+    routes = []
+    for pair in getSrcDstPairs(board_state):
+        src_hex = pair[0]
+        dst_hex = pair[1]
+        routes.append(RouteInfo(src_hex, dst_hex, bfs(src_hex, dst_hex.coord, board_state.board_dict).extractRoute()))
+
+    # sort rule implemented in RouteInfo class
+    routes.sort()
+    if SINGLE_TOKEN_SHOW_ROUTE:
+        for i in routes:
+            print(i)
+
+    return routes

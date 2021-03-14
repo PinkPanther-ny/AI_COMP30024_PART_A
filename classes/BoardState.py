@@ -1,3 +1,4 @@
+import copy
 import itertools
 from typing import List
 
@@ -5,6 +6,7 @@ from classes.Hex import Hex, tupleToCoord
 from classes.HexNode import HexNode
 from classes.enums import getEnumByName, Token
 from config.config import *
+from search.util import print_board
 
 
 class BoardState:
@@ -34,14 +36,15 @@ class BoardState:
                     pieces = list(pieces)
                     if getEnumByName(pieces[0], Token).battle(getEnumByName(pieces[1], Token)):
                         for token in self.board_dict[i].copy():
-                            if token == pieces[1]:
+                            if token[1] == pieces[1]:
                                 self.board_dict[i].remove(token)
                     else:
                         for token in self.board_dict[i].copy():
-                            if token == pieces[0]:
+                            if token[1] == pieces[0]:
                                 self.board_dict[i].remove(token)
 
     def getChildStates(self):
+        origin = copy.deepcopy(self.board_dict)
         upper_hexes: List[Hex] = []
         for location in self.board_dict:
             for piece in self.board_dict[location]:
@@ -59,7 +62,33 @@ class BoardState:
         # A list of list of child state hexes
         combination = [[n for n in i] for i in itertools.product(*next_steps)]
 
-        if CHILD_STATES_SHOW_HEX:
+        self.update()
+        if CHILD_STATES_SHOW_COMBINATIONS:
             print("The combination of their movements are:")
             for i in combination:
                 print("\t\t", [str(h) for h in i])
+
+        for location in self.board_dict.copy():
+            # Remove all upper tokens
+            self.board_dict[location] = [token for token in self.board_dict[location] if token[0] != UPPER_SIGN[0]]
+        self.update()
+
+        new_board_states: List[BoardState] = []
+        for new_upper_hexes in combination:
+            new_board_state = copy.deepcopy(self.board_dict)
+            for new_hex in new_upper_hexes:
+                new_board_state[new_hex.coord.toTuple()].append(
+                    UPPER_SIGN[0] + new_hex.token.name.upper() + UPPER_SIGN[1])
+            new_board_states.append(BoardState(copy.deepcopy(new_board_state)))
+
+        self.board_dict = origin
+        return new_board_states
+
+    def win(self):
+
+        self.update()
+        for location in self.board_dict:
+            for token in self.board_dict[location]:
+                if token[0] == LOWER_SIGN[0]:
+                    return False
+        return True
