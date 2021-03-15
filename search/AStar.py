@@ -28,4 +28,4 @@ def heuristic(board_state):
         elif HEURISTIC_MODE == H_SINGLE_MAX_ABSOLUTE_DISTANCE:
             return max([i[0].coord.distance(i[1].coord) for i in getSrcDstPairs(board_state)])
     except ValueError:
-        return inf
+        return 8

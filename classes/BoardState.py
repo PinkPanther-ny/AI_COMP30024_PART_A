@@ -6,7 +6,6 @@ from classes.Hex import Hex, tupleToCoord
 from classes.HexNode import HexNode
 from classes.enums import getEnumByName, Token
 from config.config import *
-from search.util import print_board
 
 
 class BoardState:

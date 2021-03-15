@@ -12,7 +12,7 @@ VISUALIZE_RESULT = 0
 H_SINGLE_BFS_MAX_DISTANCE = 1
 H_SINGLE_MAX_ABSOLUTE_DISTANCE = 2
 
-HEURISTIC_MODE = H_SINGLE_MAX_ABSOLUTE_DISTANCE
+HEURISTIC_MODE = H_SINGLE_BFS_MAX_DISTANCE
 
 # ------------ Global variables ------------
 # Maximum distance from the centre hex
@@ -20,4 +20,3 @@ BOARD_SIZE = 4
 UPPER_SIGN = "()"
 LOWER_SIGN = "  "
 BLOCK_SIGN = "#####"
-
