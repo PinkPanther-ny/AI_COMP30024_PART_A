@@ -91,3 +91,31 @@ class BoardState:
                 if token[0] == LOWER_SIGN[0]:
                     return False
         return True
+
+    def lose(self):
+        upper_tokens = set()
+        lower_tokens = set()
+        self.update()
+        for location in self.board_dict:
+            for token in self.board_dict[location]:
+                if token[0] == UPPER_SIGN[0]:
+                    upper_tokens.add(getEnumByName(token[1], Token))
+                elif token[0] == LOWER_SIGN[0]:
+                    lower_tokens.add(getEnumByName(token[1], Token))
+        upper_tokens = list(upper_tokens)
+        lower_tokens = list(lower_tokens)
+        if len(upper_tokens) < len(lower_tokens):
+            return True
+        elif len(upper_tokens) == 1 and len(lower_tokens) == 1:
+            return lower_tokens[0].battle(upper_tokens[0])
+        else:
+            return False
+
+    def toKey(self):
+        self.update()
+        list_items = []
+        for i in self.board_dict.copy():
+            list_items.append((i, sorted(self.board_dict[i])))
+        list_items.sort()
+
+        return str(list_items)

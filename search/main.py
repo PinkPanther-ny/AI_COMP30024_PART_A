@@ -32,6 +32,7 @@ def main():
         BoardState(board_dict), parent=None, action=None,
         pathCost=0, heuristic=heuristic(root_state)
     )
+
     result = AStar(root_node)
     astar_states = []
     while result:
@@ -42,4 +43,5 @@ def main():
 
     if VISUALIZE_RESULT:
         visualize_test(astar_states, compact=True, spf=1)
+    if SHOW_SOLVE_TIME:
         print(f"Solution found in {t1 - t0} seconds.")
