@@ -11,7 +11,7 @@ SINGLE_TOKEN_SHOW_ROUTE = False
 GET_CHILD_STATES_DEBUG = False
 CHILD_STATES_SHOW_COMBINATIONS = False
 
-VISUALIZE_RESULT = True
+VISUALIZE_RESULT = False
 SHOW_SOLVE_TIME = True
 
 # ------------ Heuristic value calculation ------------

@@ -9,6 +9,7 @@ import copy
 import json
 import sys
 import time
+from typing import List
 
 from classes.BoardNode import BoardNode
 from classes.BoardState import BoardState
@@ -25,11 +26,11 @@ def main():
         sys.exit(1)
     t0 = time.time()
     board_dict = create_board(data)
-    root_state = BoardState(board_dict)
+    root_state = BoardState(board_dict, action=None)
 
     print_board(root_state, compact=True)
     root_node = BoardNode(
-        BoardState(board_dict), parent=None, action=None,
+        root_state, parent=None, action=None,
         pathCost=0, heuristic=heuristic(root_state)
     )
 
@@ -45,3 +46,19 @@ def main():
         visualize_test(astar_states, compact=True, spf=1)
     if SHOW_SOLVE_TIME:
         print(f"Solution found in {t1 - t0} seconds.")
+    show_actions(astar_states)
+
+def show_actions(astar_states: List[BoardState]):
+    turn = 0
+    for state in astar_states:
+        if state.action is not None:
+            for singleMove in state.action:
+                if singleMove[0].coord.distance(singleMove[1].coord) == 1:
+                    print_slide(turn, singleMove[0].coord.r, singleMove[0].coord.q,
+                                singleMove[1].coord.r, singleMove[1].coord.q)
+                elif singleMove[0].coord.distance(singleMove[1].coord) == 2:
+                    print_swing(turn, singleMove[0].coord.r, singleMove[0].coord.q,
+                                singleMove[1].coord.r, singleMove[1].coord.q)
+                else:
+                    print(f"error! Turn: {turn}")
+        turn += 1

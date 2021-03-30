@@ -9,8 +9,9 @@ from config.config import *
 
 
 class BoardState:
-    def __init__(self, board_dict):
+    def __init__(self, board_dict, action):
         self.board_dict = board_dict
+        self.action: [(Hex, Hex)] = action
 
     def update(self):
 
@@ -50,9 +51,11 @@ class BoardState:
                 if piece[0] == UPPER_SIGN[0]:
                     upper_hexes.append(Hex(tupleToCoord(location), getEnumByName(piece[1], Token)))
 
-        next_steps = []
+        next_steps: [[Hex]] = []
+        parents = []
         for i in range(len(upper_hexes)):
             this_hex = HexNode(None, Hex(upper_hexes[i].coord, upper_hexes[i].token))
+            parents.append(this_hex.cur_hex)
             this_hex.getAvailableLocations(self.board_dict, [])
             next_steps.append([i.cur_hex for i in this_hex.available])
             if GET_CHILD_STATES_DEBUG:
@@ -75,10 +78,12 @@ class BoardState:
         new_board_states: List[BoardState] = []
         for new_upper_hexes in combination:
             new_board_state = copy.deepcopy(self.board_dict)
-            for new_hex in new_upper_hexes:
-                new_board_state[new_hex.coord.toTuple()].append(
-                    UPPER_SIGN[0] + new_hex.token.name.upper() + UPPER_SIGN[1])
-            new_board_states.append(BoardState(copy.deepcopy(new_board_state)))
+            action = []
+            for i in range(len(new_upper_hexes)):
+                action.append((parents[i], new_upper_hexes[i]))
+                new_board_state[new_upper_hexes[i].coord.toTuple()].append(
+                    UPPER_SIGN[0] + new_upper_hexes[i].token.name.upper() + UPPER_SIGN[1])
+            new_board_states.append(BoardState(copy.deepcopy(new_board_state), action))
 
         self.board_dict = origin
         return new_board_states
