@@ -26,7 +26,7 @@ def main():
     board_dict = create_board(data)
     root_state = BoardState(board_dict, action=None)
 
-    print_board(root_state, compact=True)
+    # print_board(root_state, compact=True)
     root_node = BoardNode(
         root_state, parent=None, action=None,
         pathCost=0, heuristic=heuristic(root_state)
