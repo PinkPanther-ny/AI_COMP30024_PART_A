@@ -91,6 +91,7 @@ class BoardState:
     def win(self):
 
         self.update()
+
         for location in self.board_dict:
             for token in self.board_dict[location]:
                 if token[0] == LOWER_SIGN[0]:
@@ -104,15 +105,15 @@ class BoardState:
         for location in self.board_dict:
             for token in self.board_dict[location]:
                 if token[0] == UPPER_SIGN[0]:
-                    upper_tokens.add(getEnumByName(token[1], Token))
+                    upper_tokens.add(token[1])
                 elif token[0] == LOWER_SIGN[0]:
-                    lower_tokens.add(getEnumByName(token[1], Token))
+                    lower_tokens.add(token[1])
         upper_tokens = list(upper_tokens)
         lower_tokens = list(lower_tokens)
         if len(upper_tokens) < len(lower_tokens):
             return True
         elif len(upper_tokens) == 1 and len(lower_tokens) == 1:
-            return lower_tokens[0].battle(upper_tokens[0])
+            return getEnumByName(lower_tokens[0], Token).battle(getEnumByName(upper_tokens[0], Token))
         else:
             return False
 

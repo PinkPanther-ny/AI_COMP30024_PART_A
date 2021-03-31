@@ -12,7 +12,7 @@ GET_CHILD_STATES_DEBUG = False
 CHILD_STATES_SHOW_COMBINATIONS = False
 
 VISUALIZE_RESULT = False
-SHOW_SOLVE_TIME = True
+SHOW_SOLVE_TIME = False
 
 # ------------ Heuristic value calculation ------------
 H_SINGLE_BFS_MAX_DISTANCE = 1

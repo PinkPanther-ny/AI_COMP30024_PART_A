@@ -1,3 +1,4 @@
+from collections import defaultdict
 from math import inf
 
 from classes.BoardNode import BoardNode
@@ -6,20 +7,21 @@ from classes.PriorityQueue import PriorityQueue
 from config.config import *
 from search.util import getAllRoutes, getSrcDstPairs
 
-
 def AStar(rootNode: BoardNode):
     frontier = PriorityQueue()
     frontier.put(rootNode, rootNode.pathCost + rootNode.heuristic)
 
+    d=defaultdict(int)
     while not frontier.empty():
         current = frontier.get()
         if current.boardState.win():
             return current
 
         for child in current.boardState.getChildStates():
-
-            # if child.lose():
-                # continue
+############################
+            #if child.lose():
+                #print(xcount)
+                #continue
             child_node = BoardNode(child, current, None,
                                    0 if BEST_FIRST_SEARCH_ON else WEIGHT_ON_COST*(current.pathCost + 1),
                                    heuristic(child))

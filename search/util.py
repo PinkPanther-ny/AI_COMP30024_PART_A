@@ -9,7 +9,9 @@ import itertools
 import os
 from collections import defaultdict
 from time import sleep
+from typing import List
 
+from classes.BoardState import BoardState
 from classes.Coord import Coord
 from classes.Hex import Hex
 from classes.RouteInfo import RouteInfo
@@ -63,16 +65,6 @@ def print_board(state, message="", compact=True, ansi=False, **kwargs):
     
     Any other keyword arguments are passed through to the print function.
 
-    Example:
-
-        >>> example_board_dict = {
-        ...     ( 0, 0): ["hello"],
-        ...     ( 0, 2): ["world"],
-        ...     ( 3,-2): ["(p)"],
-        ...     ( 2,-1): ["(S)"],
-        ...     (-4, 0): ["(R)"],
-        ... }
-        >>> print_board(example_board_dict, "message goes here", ansi=False)
         # message goes here
         #              .-'-._.-'-._.-'-._.-'-._.-'-.
         #             |     |     |     |     |     |
@@ -230,3 +222,19 @@ def getAllRoutes(board_state):
             print(i)
 
     return routes
+
+
+def show_actions(astar_states: List[BoardState]):
+    turn = 0
+    for state in astar_states:
+        if state.action is not None:
+            for singleMove in state.action:
+                if singleMove[0].coord.distance(singleMove[1].coord) == 1:
+                    print_slide(turn, singleMove[0].coord.r, singleMove[0].coord.q,
+                                singleMove[1].coord.r, singleMove[1].coord.q)
+                elif singleMove[0].coord.distance(singleMove[1].coord) == 2:
+                    print_swing(turn, singleMove[0].coord.r, singleMove[0].coord.q,
+                                singleMove[1].coord.r, singleMove[1].coord.q)
+                else:
+                    print(f"error! Turn: {turn}")
+        turn += 1

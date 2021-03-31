@@ -9,10 +9,8 @@ import copy
 import json
 import sys
 import time
-from typing import List
 
 from classes.BoardNode import BoardNode
-from classes.BoardState import BoardState
 from search.AStar import AStar, heuristic
 from search.util import *
 
@@ -47,18 +45,3 @@ def main():
     if SHOW_SOLVE_TIME:
         print(f"Solution found in {t1 - t0} seconds.")
     show_actions(astar_states)
-
-def show_actions(astar_states: List[BoardState]):
-    turn = 0
-    for state in astar_states:
-        if state.action is not None:
-            for singleMove in state.action:
-                if singleMove[0].coord.distance(singleMove[1].coord) == 1:
-                    print_slide(turn, singleMove[0].coord.r, singleMove[0].coord.q,
-                                singleMove[1].coord.r, singleMove[1].coord.q)
-                elif singleMove[0].coord.distance(singleMove[1].coord) == 2:
-                    print_swing(turn, singleMove[0].coord.r, singleMove[0].coord.q,
-                                singleMove[1].coord.r, singleMove[1].coord.q)
-                else:
-                    print(f"error! Turn: {turn}")
-        turn += 1
